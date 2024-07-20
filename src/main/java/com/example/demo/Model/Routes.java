@@ -42,6 +42,9 @@ public class Routes {
     @JsonProperty(value = "date")
     private LocalDate date;
 
+    @JsonProperty(value = "status")
+    private Integer status;
+
     public Integer getBusId() {
         return busId;
     }
@@ -88,5 +91,13 @@ public class Routes {
 
     public void setDate(LocalDate date) {
         this.date = date;
+    }
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
     }
 }

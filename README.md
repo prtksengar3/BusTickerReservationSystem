@@ -1,6 +1,7 @@
 Ticket Reservation System
 To setup the project create the following tables and update db credentials in application.properties
 
+Note : For creating a user insert into user table by entering username and password(enter password in md5 use -> https://www.md5hashgenerator.com/ to convert)
 CREATE TABLE `user` (
   `user_id` int NOT NULL AUTO_INCREMENT,
   `username` varchar(255) NOT NULL,
@@ -9,6 +10,9 @@ CREATE TABLE `user` (
   PRIMARY KEY (`user_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
+INSERT INTO user (username, password, created_on)
+VALUES ('prateek', '25d55ad283aa400af464c76d713c07ad', '2024-07-20 11:29:49');
+
 CREATE TABLE `buses` (
   `bus_id` int NOT NULL AUTO_INCREMENT,
   `bus_number` varchar(255) NOT NULL,
@@ -16,6 +20,10 @@ CREATE TABLE `buses` (
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`bus_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+INSERT INTO buses (bus_number, total_seats, created_at)
+VALUES ('HR26AM1234', 30, '2024-07-20 12:14:32');
+
 
 CREATE TABLE `routes` (
   `route_id` int NOT NULL AUTO_INCREMENT,
@@ -32,6 +40,10 @@ CREATE TABLE `routes` (
   CONSTRAINT `routes_ibfk_1` FOREIGN KEY (`bus_id`) REFERENCES `buses` (`bus_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
+INSERT INTO routes (bus_id, departure_city, arrival_city, departure_time, arrival_time, date, created_at, status)
+VALUES (1, 'Delhi', 'Manali', '20:00:00', '07:00:00', '2024-07-21', '2024-07-20 12:18:06', 1);
+
+
 CREATE TABLE `reservations` (
   `reservation_id` int NOT NULL AUTO_INCREMENT,
   `user_id` int NOT NULL,
@@ -46,6 +58,11 @@ CREATE TABLE `reservations` (
   CONSTRAINT `reservations_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`),
   CONSTRAINT `reservations_ibfk_2` FOREIGN KEY (`bus_id`) REFERENCES `buses` (`bus_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+INSERT INTO reservations (user_id, bus_id, seats, reservation_date, status, payment_via)
+VALUES (1, 1, 2, '2024-07-20 14:45:31', 1, 'credit_card');
+
+
 
 REST API's for Use Case 1:
 
@@ -70,9 +87,9 @@ REST API's for Use Case 2:
 method type - POST
 Request :
 {
-    "arrival_city" : "Manali",
-    "departure_city" : "Delhi",
-    "date" : "2024-07-21"
+    "arrival_city" : "Manali", //optional
+    "departure_city" : "Delhi", //optional
+    "date" : "2024-07-21"   //optional
 }
 
 Response :
@@ -105,12 +122,13 @@ Response
 
 REST API's for Use Case 4:
 /makeReservation
+method type - POST
 Request :
 {
-    "bus_id":1,
-    "user_id":1,
-    "seats":4,
-    "payment_via":"credit_card"
+    "bus_id":1,  //mandatory
+    "user_id":1, //mandatory
+    "seats":4,  //mandatory
+    "payment_via":"credit_card"  //mandatory
 }
 
 Response :
